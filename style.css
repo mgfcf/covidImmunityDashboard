@@ -1,0 +1,121 @@
+body {
+    margin: 0;
+    font-family: "Inria Sans", "Arial", sans-serif;
+    font-size: 18px;
+}
+
+* {
+    -webkit-transition: .2s;
+    transition: .2s;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    padding: 0px 4px 0px 4px;
+    border: 1px solid #000;
+    border-radius: 3px;
+}
+
+a:hover {
+    background-color: #000;
+    color: #FFF;
+}
+
+.differ {
+    font-family: 'PT Mono', 'Courier New', monospace;
+}
+
+.content_wrapper {
+    max-width: 1000px;
+    margin: auto;
+    padding: 50px;
+}
+
+header {
+    background-color: #EEE;
+}
+
+.progress_label {
+    font-size: 30pt;
+    overflow: wrap;
+    text-align: left;
+}
+
+.progress_timestamp {
+    font-size: 10pt;
+    overflow: wrap;
+    text-align: left;
+    font-weight: lighter;
+}
+
+.progress_value {
+    font-size: 80pt;
+    text-align: center;
+    font-weight: bold;
+}
+
+section>p:first-child {
+    font-weight: bold;
+    font-size: 24pt;
+}
+
+section {
+    margin-bottom: 100px;
+    line-height: 1.4em;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+tr {
+    border: none;
+    border-top: solid;
+    border-width: 1px;
+    border-color: darkgrey;
+}
+
+tr:first-child {
+    border-top: none;
+}
+
+td {
+    padding: 10px;
+}
+
+td:first-child {
+    font-weight: bold;
+}
+
+input, select {
+    font-family: 'PT Mono', 'Courier New', monospace;
+    font-size: 18px;
+    max-width: 200px;
+}
+
+button {
+    background-color: #FFF;
+    border: solid 1px #000;
+    font-family: "Inria Sans", "Arial", sans-serif;
+    font-size: 18px;
+    box-shadow: #999 0px 3px 5px;
+}
+
+button:hover {
+    background-color: #000;
+    color: #FFF;
+}
+
+button:active {
+    box-shadow: none;
+}
+
+button#reset {
+    margin-top: 20px;
+}
+
+bold {
+    font-weight: bold;
+}

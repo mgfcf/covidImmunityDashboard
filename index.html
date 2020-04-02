@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>COVID-19 Herdenimmunität</title>
+        <meta charset="UTF-8">
+        <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:wght@300;400;700&family=PT+Mono&display=swap" rel="stylesheet">
+        <link href="style.css" rel="stylesheet">
+        <link rel="shortcut icon" type="image/png" href="favicon.png"/>
+    </head>
+    <body>
+        <header>
+            <div class="content_wrapper">
+                <div class="progress_label">Fortschritt bis zur Herdenimmunität in <data data-value-id="regionName"></data></div>
+                <div class="progress_timestamp" data-value-id="timestamp"></div>
+                <div class="progress_value differ" data-value-id="progress"></div>
+                <div style="text-align: center;"><data data-value-id="immune"></data> [<data data-value-id="immunity"></data>] von <data data-value-id="population"></data> Einwohnern immun</div>
+            </div>
+        </header>
+        <main>
+            <div class="content_wrapper">
+                <section>
+                    <p>
+                        Getroffene Annahmen der Modellvorstellung
+                    </p>
+                    <table class="interactive differ">
+                        <tr>
+                            <td>Region</td>
+                            <td><select id="region_ia" data-value-id="region" onchange="initStats()"></td>
+                            <td><div data-value-id="regionName"></div></td>
+                        </tr>
+                        <tr>
+                            <td>Einwohner</td>
+                            <td><input id="population_ia" type="number" data-value-id="population" onchange="updateStats()"></td>
+                            <td><div data-value-id="population"></div></td>
+                        </tr>
+                        <tr>
+                            <td>R0</td>
+                            <td><input id="r0_ia" type="text" data-value-id="r0" onchange="updateStats()"></td>
+                            <td><div data-value-id="r0"></div></td>
+                        </tr>
+                        <tr>
+                            <td>Aktive Fälle</td>
+                            <td><input id="active_ia" type="number" data-value-id="active" onchange="updateStats()"></td>
+                            <td><div data-value-id="active"></div></td>
+                        </tr>
+                        <tr>
+                            <td>Genesen</td>
+                            <td><input id="recovered_ia" type="number" data-value-id="recovered" onchange="updateStats()"></td>
+                            <td><div data-value-id="recovered"></div></td>
+                        </tr>
+                        <tr>
+                            <td>Tote</td>
+                            <td><input id="deaths_ia" type="number" data-value-id="deaths" onchange="updateStats()"></td>
+                            <td><div data-value-id="deaths"></div></td>
+                        </tr>
+                        <tr>
+                            <td>Dunkelziffer Multiplikator</td>
+                            <td><input id="unknown_ia" type="number" data-value-id="unknown" onchange="updateStats()"></td>
+                            <td><div data-value-id="unknown"></div></td>
+                        </tr>
+                    </table>
+                    <button id="reset" onclick="initStats()">Zurücksetzen</button>
+                    <p>Daraus resultieren:</p>
+                    <table style="max-width: 500px;">
+                        <tr>
+                            <td>Tatsächlich aktive Fälle</td>
+                            <td data-value-id="unknown_active"></td>
+                        </tr>
+                        <tr>
+                            <td>Immune Fälle</td>
+                            <td data-value-id="immune"></td>
+                        </tr>
+                        <tr>
+                            <td>Anfällig</td>
+                            <td data-value-id="vulnerable"></td>
+                        </tr>
+                        <tr>
+                            <td>Gesamt Immunität</td>
+                            <td data-value-id="immunity"></td>
+                        </tr>
+                        <tr>
+                            <td>Minimale Herdenimmunitätsgrenze</td>
+                            <td data-value-id="min_immunity"></td>
+                        </tr>
+                    </table>
+                </section>
+                <section>
+                    <p>
+                        Was ist <a href="https://de.wikipedia.org/wiki/Herdenimmunit%C3%A4t" target="_blank">Herdenimmunität</a>?
+                    </p>
+                    <p>
+                        Wenn ein gewisser Anteil einer Gruppe immun gegenüber einer Infektionskrankheit ist, kann die Krankheit sich nicht mehr ausreichend verbreiten und die Zahl der täglichen Infektionen sinkt. Nicht jeder muss immun sein, um die Ausbreitung zu stoppen.
+                    </p>
+                    <p>
+                        Die untere Grenze des immunen Anteils der Gruppe ist hier als "Minimale Herdenimmunitätsgrenze" (=H) bezeichnet. Dabei spielt die <a href=
+                        "https://de.wikipedia.org/wiki/Basisreproduktionszahl" target="_blank">Basisreproduktionszahl</a> (=R) eine zentrale Rolle. Je höher die Basisreproduktionszahl, also je mehr Personen eine infizierte Person ansteckt, desto größer muss die Herdenimmunität sein. Der hier verwendete Zusammenhang lautet: H = 1 - 1 / R
+                    </p>
+                </section>
+                <section>
+                    <p>
+                        Inspiration
+                    </p>
+                    <div style="text-align: center;">
+                        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/3z0gnXgK8Do" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </section>
+                <section>
+                    <p>
+                        Quellen
+                    </p>
+                    <p>
+                        Für die <bold>COVID-19 Statistiken</bold> wird folgende API verwendet: <a href="https://covid-api.com/" target="_blank">https://covid-api.com/</a>, welche den Zugriff auf die Daten des John Hopkins CSSE (<a href="https://github.com/CSSEGISandData/COVID-19" target="_blank">https://github.com/CSSEGISandData/COVID-19</a>) zugreift. Auch bekannt durch: <a href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6" target="_blank">https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6</a>
+                    </p>
+                    <p>
+                        Für die <bold>Regionen und Bevölkerungszahlen</bold> wird auf eine lokale, aufbereitete Kopie folgender Wikipedia Seite zugegriffen: <a href="https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population" target="_blank">https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population</a>
+                    </p>
+                </section>
+            </div>
+        </main>
+        <script src="countries.js"></script>
+        <script src="covidImmunity.js"></script>
+        <script>
+            initCountries();
+            initStats();
+        </script>
+    </body>
+</html>
