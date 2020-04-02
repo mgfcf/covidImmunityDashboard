@@ -112,9 +112,15 @@ function getValue(id) {
 }
 
 function initStats () {
-    if (getValue("region_ia") !== "")
-        collectInteractiveData();
+    regionId = "Germany";
+    region = {'population': 83149300, 'api_query': 'Germany'};
 
+    initialCovidData(updateStats, false);
+}
+
+function refreshStats () {
+    regionId = getValue("region_ia");
+    region = countries[regionId];
     initialCovidData(updateStats, false);
 }
 
@@ -134,4 +140,5 @@ function initCountries () {
 
         container.appendChild(option);
     });
+    container.value = regionId;
 }
