@@ -55,7 +55,7 @@ function getImmunityProgress () {
 
 function getImmunity () {
     var immune = getImmune();
-    return immune / (immune + getVulnerable());
+    return immune / (population - data.deaths);
 }
 
 // Based on https://de.wikipedia.org/wiki/Herdenimmunit%C3%A4t#Eigenschaften
