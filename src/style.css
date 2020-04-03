@@ -119,3 +119,11 @@ button#reset {
 bold {
     font-weight: bold;
 }
+
+code {
+    font-family: 'PT Mono', 'Courier New', monospace;
+    background-color: #EEE;
+    padding: 0px 4px 0px 4px;
+    border-radius: 3px;
+    font-weight: bold;
+}
