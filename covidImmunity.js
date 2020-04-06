@@ -108,6 +108,8 @@ function getValue(id) {
 function initStats () {
     regionId = "Germany";
     region = {'population': 83149300, 'api_query': 'Germany'};
+    r0 = 3.3;
+    unknownMultiplier = 10;
 
     initialCovidData(updateStats, false);
 }
