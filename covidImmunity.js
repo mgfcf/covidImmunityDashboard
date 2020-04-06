@@ -38,15 +38,11 @@ function initialCovidData (callback, callbackArgs) {
 }
 
 function getUnknownActive () {
-    return data.active * unknownMultiplier;
+    return (data.active) * unknownMultiplier;
 }
 
 function getImmune () {
-    return data.active * unknownMultiplier + data.recovered;
-}
-
-function getVulnerable () {
-    return population - getImmune() - data.deaths;
+    return (data.active + data.recovered) * unknownMultiplier;
 }
 
 function getImmunityProgress () {
@@ -54,8 +50,7 @@ function getImmunityProgress () {
 }
 
 function getImmunity () {
-    var immune = getImmune();
-    return immune / (population - data.deaths);
+    return getImmune() / (population - data.deaths);
 }
 
 // Based on https://de.wikipedia.org/wiki/Herdenimmunit%C3%A4t#Eigenschaften
@@ -76,7 +71,6 @@ function updateStats(collect = true) {
     setText("unknown", unknownMultiplier);
     setText("unknown_active", getUnknownActive());
     setText("immune", getImmune());
-    setText("vulnerable", getVulnerable());
     setText("immunity", (getImmunity() * 100).toFixed(decimalPlaces) + "%");
     setText("min_immunity", (getMinRequiredImmunity() * 100).toFixed(decimalPlaces) + "%");
 
