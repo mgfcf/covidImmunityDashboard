@@ -11,7 +11,7 @@
         <header>
             <div class="content_wrapper">
                 <div class="progress_label">Fortschritt bis zur Herdenimmunität: <data data-value-id="regionName"></data></div>
-                <div class="progress_timestamp" data-value-id="timestamp"></div>
+                <div class="progress_timestamp" data-value-id="last_update"></div>
                 <div class="progress_value differ" data-value-id="progress"></div>
                 <div style="text-align: center;"><data data-value-id="immune"></data> [<data data-value-id="immunity"></data>] von <data data-value-id="population"></data> Einwohnern immun</div>
             </div>
@@ -39,14 +39,9 @@
                             <td><div data-value-id="r0"></div></td>
                         </tr>
                         <tr>
-                            <td>Aktive Fälle</td>
-                            <td><input id="active_ia" type="number" data-value-id="active" onchange="updateStats()"></td>
-                            <td><div data-value-id="active"></div></td>
-                        </tr>
-                        <tr>
-                            <td>Genesen</td>
-                            <td><input id="recovered_ia" type="number" data-value-id="recovered" onchange="updateStats()"></td>
-                            <td><div data-value-id="recovered"></div></td>
+                            <td>Bestätigte Fälle</td>
+                            <td><input id="confirmed_ia" type="number" data-value-id="confirmed" onchange="updateStats()"></td>
+                            <td><div data-value-id="confirmed"></div></td>
                         </tr>
                         <tr>
                             <td>Tote</td>
@@ -63,12 +58,12 @@
                     <p>Daraus resultieren:</p>
                     <table style="max-width: 500px;">
                         <tr>
-                            <td>Tatsächlich aktive Fälle</td>
-                            <td data-value-id="unknown_active"></td>
+                            <td>Tatsächlich bestätigte Fälle</td>
+                            <td data-value-id="immune"></td>
                         </tr>
                         <tr>
-                            <td>Immune Fälle</td>
-                            <td data-value-id="immune"></td>
+                            <td>Tatsächlich Tote</td>
+                            <td data-value-id="real_deaths"></td>
                         </tr>
                         <tr>
                             <td>Gesamt Immunität</td>
@@ -97,13 +92,13 @@
                         Berechnung
                     </p>
                     <p>
-                        Im Grunde wird der <code>Anteil der Immunen durch die minimale Herdenimmunitätsgrenze</code> geteilt. Der <code>Anteil der Immunen</code> ergibt sich aus den <code>Immunen, geteilt durch die Gesamtpopulation minus bereits Verstorbene</code>.
+                        Im Grunde wird der <code>Anteil der Immunen durch die minimale Herdenimmunitätsgrenze</code> geteilt. Der <code>Anteil der Immunen</code> ergibt sich aus den <code>Immunen, geteilt durch die Gesamtpopulation, minus die Anzahl der bereits Verstorbenen multipliziert mit dem Dunkelziffer Multiplikator</code>.
                     </p>
                     <p>
                         Die <code>Verstorbenen</code> sollten zunächst keinen großen Einfluss haben, insbesondere da es täglich auch Geburten gibt. Doch wenn die Todeszahl stark Ansteigt, beziehungsweise sehr groß ist, kann sich das so deutlich machen.
                     </p>
                     <p>
-                        Die <code>Immunen</code> ergeben sich aus den <code>aktiven Fällen plus der Anzahl der bereits genesenen Fälle, mal dem Dunkelziffer Multiplikator</code>, welcher die bisher nicht registrierten Fälle hervorbringen soll.
+                        Die <code>Immunen</code> ergeben sich aus den <code>bestätigen Fällen minus die Anzahl der bereits Verstorbenen, mal dem Dunkelziffer Multiplikator</code>, welcher die bisher nicht registrierten Fälle hervorbringen soll.
                     </p>
                     <p>
                         Für die minimale <code>Herdenimmunitätsgrenze</code> wird die oben beschriebene Formel verwendet.

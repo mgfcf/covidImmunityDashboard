@@ -1,34 +1,46 @@
-var regionId = "Germany";
-var region = {'population': 83149300, 'api_query': 'Germany'};
+var regionId = undefined;
+var region = undefined;
 var population = 0;
 var r0 = 3.3;   // 2.4-3.3, based on https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Steckbrief.html#doc13776792bodyText3
 var unknownMultiplier = 10;
 
 var covidData = {};
 var data = {
-    total: 0,
-    active: 0,
-    recovered: 0,
+    confirmed: 0,
     deaths: 0,
-    fatality: 0,
     regionName: 0,
-    regionIso: 0
+    last_update: undefined
 }
 
 // Based on https://covid-api.com/
-function initialCovidData (callback, callbackArgs) {
-    return fetch("https://covid-api.com/api/reports?q=" + region.api_query)
+function loadCovidData(callback, callbackArgs) {
+    var api_url = 'https://covid-api.com/api/reports?q=' + region.api_query;
+    var yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    var yesterday_string = yesterday.getUTCFullYear() + "-" +
+        ("0" + (yesterday.getUTCMonth() + 1)).slice(-2) + "-" +
+        ("0" + yesterday.getUTCDate()).slice(-2);
+    if (region.api_query == 'total') {
+        api_url = 'https://covid-api.com/api/reports/total?date=' + yesterday_string
+    }
+
+    return fetch(api_url)
         .then(response => { return response.json(); })
         .then(json => {
-            covidData = json.data[0];
+            if (region.api_query == 'total')
+                covidData = json.data;
+            else
+                covidData = json.data[0];
 
-            data.total = covidData.confirmed;
-            data.active = covidData.active;
+            data.confirmed = covidData.confirmed;
             data.deaths = covidData.deaths;
-            data.recovered = covidData.recovered;
-            data.fatality = covidData.fatality_rate;
-            data.regionIso = covidData.region.iso;
-            data.regionName = covidData.region.name;
+            if (region.api_query == 'total') {
+                data.regionName = 'Earth';
+                data.last_update = yesterday_string;
+            } else {
+                data.regionName = covidData.region.name;
+                data.last_update = covidData.last_update;
+            }
 
             population = region.population;
 
@@ -37,24 +49,20 @@ function initialCovidData (callback, callbackArgs) {
         });
 }
 
-function getUnknownActive () {
-    return (data.active) * unknownMultiplier;
+function getImmune() {
+    return (data.confirmed - data.deaths) * unknownMultiplier;
 }
 
-function getImmune () {
-    return (data.active + data.recovered) * unknownMultiplier;
-}
-
-function getImmunityProgress () {
+function getImmunityProgress() {
     return getImmunity() / getMinRequiredImmunity();
 }
 
-function getImmunity () {
-    return getImmune() / (population - data.deaths);
+function getImmunity() {
+    return getImmune() / (population - data.deaths * unknownMultiplier);
 }
 
 // Based on https://de.wikipedia.org/wiki/Herdenimmunit%C3%A4t#Eigenschaften
-function getMinRequiredImmunity () {
+function getMinRequiredImmunity() {
     return (1 - (1 / r0));
 }
 
@@ -63,13 +71,12 @@ function updateStats(collect = true) {
         collectInteractiveData();
 
     var decimalPlaces = 2;
-    setText("timestamp", covidData.last_update);
     setText("r0", r0);
     setText("progress", (getImmunityProgress() * 100).toFixed(decimalPlaces) + "%");
     setText("population", population);
     setText("region", regionId);
+    setText("real_deaths", data.deaths * unknownMultiplier);
     setText("unknown", unknownMultiplier);
-    setText("unknown_active", getUnknownActive());
     setText("immune", getImmune());
     setText("immunity", (getImmunity() * 100).toFixed(decimalPlaces) + "%");
     setText("min_immunity", (getMinRequiredImmunity() * 100).toFixed(decimalPlaces) + "%");
@@ -85,18 +92,17 @@ function setText(valueId, value) {
             dom.nodeName == "SELECT")
             dom.value = value;
         else
-            dom.innerHTML  = value;
+            dom.innerHTML = value;
     });
 
 }
 
-function collectInteractiveData () {
+function collectInteractiveData() {
     regionId = getValue("region_ia");
     region = countries[regionId];
     population = Number(getValue("population_ia"));
     r0 = Number(getValue("r0_ia"));
-    data.active = Number(getValue("active_ia"));
-    data.recovered = Number(getValue("recovered_ia"));
+    data.confirmed = Number(getValue("confirmed_ia"));
     data.deaths = Number(getValue("deaths_ia"));
     unknownMultiplier = Number(getValue("unknown_ia"));
 }
@@ -105,27 +111,27 @@ function getValue(id) {
     return document.getElementById(id).value;
 }
 
-function initStats () {
-    regionId = "Germany";
-    region = {'population': 83149300, 'api_query': 'Germany'};
+function initStats() {
+    regionId = "Earth";
+    region = countries[regionId];
     r0 = 3.3;
     unknownMultiplier = 10;
 
-    initialCovidData(updateStats, false);
+    loadCovidData(updateStats, false);
 }
 
-function refreshStats () {
+function refreshStats() {
     regionId = getValue("region_ia");
     region = countries[regionId];
-    initialCovidData(updateStats, false);
+    loadCovidData(updateStats, false);
 }
 
-function onenter (event, callback) {
+function onenter(event, callback) {
     if (event.key == "Enter")
         callback();
 }
 
-function initCountries () {
+function initCountries() {
     var availableCountries = Object.keys(countries);
 
     var container = document.getElementById("region_ia");
